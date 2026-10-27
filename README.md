@@ -8,6 +8,8 @@ REST API to manage the lifecycle of preventive and corrective maintenance for th
 
 - **Name:** Axel Ruiz Polo
 - **Clan:** Centurion
+- **GitHub:** [@Arp34](https://github.com/Arp34)
+- **Email:** axeldrp3407@gmail.com
 
 ## 🚀 Requirements
 
