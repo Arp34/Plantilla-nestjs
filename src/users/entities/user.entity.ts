@@ -1,8 +1,7 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, OneToMany, type Relation } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { AppBaseEntity } from '../../common/entities/base.entity.js';
 import { Role } from '../../common/enums/role.enum.js';
-import type { Product } from '../../products/entities/product.entity.js';
 
 @Entity('users')
 export class User extends AppBaseEntity {
@@ -12,14 +11,12 @@ export class User extends AppBaseEntity {
   @Column({ unique: true, length: 150 })
   email: string;
 
+  // select: false -> the hash is never returned unless explicitly requested (login)
+  // select: false -> el hash nunca se devuelve salvo que se pida explícitamente (login)
   @Exclude()
   @Column({ select: false })
   password: string;
 
-  @Column({ type: 'enum', enum: Role, default: Role.USER })
+  @Column({ type: 'enum', enum: Role, default: Role.TECHNICIAN })
   role: Role;
-
-  // Usa strings para la entidad destino y la propiedad inversa
-  @OneToMany('Product', 'owner')
-  products: Relation<Product[]>;
 }

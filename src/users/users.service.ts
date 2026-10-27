@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hash } from 'bcryptjs';
 import { Repository } from 'typeorm';
 import type { Role } from '../common/enums/role.enum.js';
 import { User } from './entities/user.entity.js';
@@ -8,8 +9,14 @@ import { User } from './entities/user.entity.js';
 export class UsersService {
   constructor(@InjectRepository(User) private readonly usersRepo: Repository<User>) {}
 
-  create(data: { name: string; email: string; password: string; role?: Role }) {
-    return this.usersRepo.save(this.usersRepo.create(data));
+  // Single place where passwords are hashed (register, admin creation and seed use it)
+  // Único lugar donde se hashean contraseñas (registro, creación por admin y seed lo usan)
+  async create(data: { name: string; email: string; password: string; role: Role }) {
+    if (await this.findByEmail(data.email)) {
+      throw new ConflictException(`El email ${data.email} ya está registrado`);
+    }
+    const password = await hash(data.password, 10);
+    return this.usersRepo.save(this.usersRepo.create({ ...data, password }));
   }
 
   findByEmail(email: string) {

@@ -31,8 +31,15 @@ describe('AuthService', () => {
   });
 
   describe('register', () => {
-    it('lanza ConflictException si el email ya existe', async () => {
-      usersService.findByEmail.mockResolvedValue({ id: 'u1' });
+    it('siempre registra con rol TECHNICIAN', async () => {
+      usersService.create.mockResolvedValue({ id: 'u1', ...dto, role: Role.TECHNICIAN });
+      const res = await service.register(dto);
+      expect(usersService.create).toHaveBeenCalledWith({ ...dto, role: Role.TECHNICIAN });
+      expect(res.user.role).toBe(Role.TECHNICIAN);
+    });
+
+    it('propaga ConflictException si el email ya existe', async () => {
+      usersService.create.mockRejectedValue(new ConflictException());
       await expect(service.register(dto)).rejects.toThrow(ConflictException);
     });
   });

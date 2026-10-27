@@ -10,8 +10,6 @@ import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
-import { ProductsModule } from './products/products.module.js';
-import { DatabaseModule } from './database/database.module.js';
 import { VehiclesModule } from './vehicles/vehicles.module.js';
 
 @Module({
@@ -27,7 +25,7 @@ import { VehiclesModule } from './vehicles/vehicles.module.js';
         type: 'postgres',
         host: config.get('DB_HOST', { infer: true }),
         port: config.get('DB_PORT', { infer: true }),
-        username: config.get('DB_USER', { infer: true }),
+        username: config.get('DB_USERNAME', { infer: true }),
         password: config.get('DB_PASSWORD', { infer: true }),
         database: config.get('DB_NAME', { infer: true }),
         autoLoadEntities: true,
@@ -37,9 +35,7 @@ import { VehiclesModule } from './vehicles/vehicles.module.js';
     }),
     UsersModule,
     AuthModule,
-    ProductsModule,
     VehiclesModule,
-    DatabaseModule,
   ],
   controllers: [],
   providers: [

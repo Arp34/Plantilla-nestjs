@@ -1,8 +1,9 @@
-import { Controller, Get, Param, ParseUUIDPipe } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth } from '../common/decorators/auth.decorator.js';
 import { CurrentUser } from '../common/decorators/current-user.decorator.js';
 import { Role } from '../common/enums/role.enum.js';
+import { CreateUserDto } from './dto/create-user.dto.js';
 import { UsersService } from './users.service.js';
 
 @ApiTags('users')
@@ -10,8 +11,16 @@ import { UsersService } from './users.service.js';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Auth()            
-  @Get('me')         
+  // Only an ADMIN can create users with any role (including other admins)
+  // Solo un ADMIN puede crear usuarios con cualquier rol (incluidos otros admins)
+  @Auth(Role.ADMIN)
+  @Post()
+  create(@Body() dto: CreateUserDto) {
+    return this.usersService.create(dto);
+  }
+
+  @Auth()
+  @Get('me')
   me(@CurrentUser('sub') userId: string) {
     return this.usersService.findOne(userId);
   }

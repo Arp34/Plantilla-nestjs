@@ -4,7 +4,7 @@ services:
     container_name: prueba_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DB_USER}
+      POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
@@ -12,7 +12,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
       interval: 5s
       retries: 5
 
@@ -20,7 +20,7 @@ services:
     image: postgres:17-alpine
     container_name: prueba_db_test
     environment:
-      POSTGRES_USER: ${DB_USER}
+      POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: prueba_db_test
     ports:
