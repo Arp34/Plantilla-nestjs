@@ -31,9 +31,11 @@ export function configureApp(app: INestApplication) {
 
 export function setupSwagger(app: INestApplication) {
   const config = new DocumentBuilder()
-    .setTitle('API Prueba de desempeño')
+    .setTitle('FleetCore API')
+    .setDescription('Gestión del ciclo de vida de mantenimientos de la flota')
     .setVersion('1.0')
     .addBearerAuth()
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'api-key')
     .build();
   SwaggerModule.setup('docs', app, SwaggerModule.createDocument(app, config));
 }

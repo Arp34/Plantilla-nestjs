@@ -13,6 +13,8 @@ import { RolesGuard } from './common/guards/roles.guard.js';
 import { VehiclesModule } from './vehicles/vehicles.module.js';
 import { MechanicsModule } from './mechanics/mechanics.module.js';
 import { WorkshopsModule } from './workshops/workshops.module.js';
+import { MaintenancesModule } from './maintenances/maintenances.module.js';
+import { IntegrationsModule } from './integrations/integrations.module.js';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { WorkshopsModule } from './workshops/workshops.module.js';
     VehiclesModule,
     MechanicsModule,
     WorkshopsModule,
+    MaintenancesModule,
+    IntegrationsModule,
   ],
   controllers: [],
   providers: [
