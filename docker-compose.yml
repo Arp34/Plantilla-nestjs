@@ -11,10 +11,30 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - fleetcore-net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
       interval: 5s
       retries: 5
+
+  api:
+    build: .
+    container_name: fleetcore_api
+    restart: unless-stopped
+    env_file: .env
+    # Inside the Docker network the API reaches Postgres by service name and internal port
+    # Dentro de la red de Docker la API llega a Postgres por el nombre del servicio y el puerto interno
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    ports:
+      - "${PORT}:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - fleetcore-net
 
   db_test:
     image: postgres:17-alpine
@@ -30,3 +50,6 @@ services:
 
 volumes:
   pgdata:
+
+networks:
+  fleetcore-net:
