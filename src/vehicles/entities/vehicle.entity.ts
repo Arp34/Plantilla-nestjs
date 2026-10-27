@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany, type Relation } from 'typeorm';
 import { AppBaseEntity } from '../../common/entities/base.entity.js';
+import type { Maintenance } from '../../maintenances/entities/maintenance.entity.js';
 import { VehicleStatus } from '../enums/vehicle-status.enum.js';
 
 @Entity('vehicles')
@@ -25,4 +26,9 @@ export class Vehicle extends AppBaseEntity {
   // Enum nativo de Postgres: la BD rechaza valores fuera de la lista
   @Column({ type: 'enum', enum: VehicleStatus, default: VehicleStatus.AVAILABLE })
   status: VehicleStatus;
+
+  // Inverse side of Maintenance.vehicle: no column here, the FK lives in "maintenances"
+  // Lado inverso de Maintenance.vehicle: no crea columna aquí, la FK vive en "maintenances"
+  @OneToMany('Maintenance', 'vehicle')
+  maintenances: Relation<Maintenance[]>;
 }
