@@ -11,6 +11,8 @@ import { UsersModule } from './users/users.module.js';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
 import { VehiclesModule } from './vehicles/vehicles.module.js';
+import { MechanicsModule } from './mechanics/mechanics.module.js';
+import { WorkshopsModule } from './workshops/workshops.module.js';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { VehiclesModule } from './vehicles/vehicles.module.js';
     UsersModule,
     AuthModule,
     VehiclesModule,
+    MechanicsModule,
+    WorkshopsModule,
   ],
   controllers: [],
   providers: [
