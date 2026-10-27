@@ -11,6 +11,8 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
+// Runs AFTER the controller: next.handle() is the controller's result and map() wraps it in the standard shape
+// Se ejecuta DESPUÉS del controlador: next.handle() es el resultado del controlador y map() lo envuelve en el formato estándar
 @Injectable()
 export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T>> {
   intercept(ctx: ExecutionContext, next: CallHandler<T>): Observable<ApiResponse<T>> {

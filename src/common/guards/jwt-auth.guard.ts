@@ -18,12 +18,16 @@ export class JwtAuthGuard implements CanActivate {
       ctx.getHandler(),
       ctx.getClass(),
     ]);
+    // Registered globally (APP_GUARD): every route requires a token unless it has @Public()
+    // Registrado globalmente (APP_GUARD): toda ruta exige token salvo que tenga @Public()
     if (isPublic) return true;
 
     const req = ctx.switchToHttp().getRequest<AuthRequest>();
     const [type, token] = req.headers.authorization?.split(' ') ?? [];
     if (type !== 'Bearer' || !token) throw new UnauthorizedException('Token requerido');
 
+    // verifyAsync checks signature and expiration; the decoded payload is saved in req.user for later guards/@CurrentUser()
+    // verifyAsync revisa firma y expiración; el payload decodificado se guarda en req.user para los siguientes guards/@CurrentUser()
     try {
       req.user = await this.jwt.verifyAsync<JwtPayload>(token);
     } catch {

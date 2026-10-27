@@ -15,6 +15,8 @@ export class RolesGuard implements CanActivate {
       ctx.getHandler(),
       ctx.getClass(),
     ]);
+    // Reads the roles saved by @Roles() (metadata). No roles declared = any authenticated user passes
+    // Lee los roles guardados por @Roles() (metadata). Sin roles declarados = pasa cualquier usuario autenticado
     if (!required?.length) return true;
 
     const { user } = ctx.switchToHttp().getRequest<AuthRequest>();
