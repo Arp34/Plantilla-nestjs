@@ -1,43 +1,43 @@
 # FleetCore API
 
-API REST para gestionar el ciclo de vida de los mantenimientos preventivos y correctivos de la flota de vehículos de FleetCore.
+REST API to manage the lifecycle of preventive and corrective maintenance for the FleetCore vehicle fleet.
 
 **Stack:** NestJS 12 · TypeScript · TypeORM · PostgreSQL 17 · JWT · Swagger · Docker · Vitest
 
 ## 👤 Coder
 
-- **Nombre:** _[tu nombre]_
-- **Clan:** _[tu clan]_
+- **Name:** _[your name]_
+- **Clan:** _[your clan]_
 
-## 🚀 Requisitos
+## 🚀 Requirements
 
 - Node.js 24 LTS
-- Docker y Docker Compose
+- Docker and Docker Compose
 
-## ⚙️ Instalación y ejecución
+## ⚙️ Installation and running
 
 ```bash
-# 1. Clonar e instalar dependencias
+# 1. Clone and install dependencies
 git clone https://github.com/Arp34/Plantilla-nestjs.git
 cd Plantilla-nestjs
 npm install
 
-# 2. Variables de entorno
+# 2. Environment variables
 cp .env.example .env
 
-# 3. Levantar PostgreSQL
+# 3. Start PostgreSQL
 docker compose up -d db
 
-# 4. Poblar la base de datos (idempotente: se puede ejecutar varias veces sin duplicar)
+# 4. Seed the database (idempotent: can be run several times without duplicating data)
 npm run seed
 
-# 5. Iniciar la API en modo desarrollo
+# 5. Start the API in development mode
 npm run start:dev
 ```
 
 API: `http://localhost:3000/api`
 
-### Opción con Docker (API + PostgreSQL)
+### Docker option (API + PostgreSQL)
 
 ```bash
 cp .env.example .env
@@ -45,86 +45,86 @@ docker compose up -d --build db api
 docker exec fleetcore_api node dist/database/seed.js
 ```
 
-La API y la base de datos se comunican por la red interna `fleetcore-net` y los datos persisten en el volumen `pgdata`.
+The API and the database communicate through the internal `fleetcore-net` network, and data persists in the `pgdata` volume.
 
-## 🔐 Variables de entorno
+## 🔐 Environment variables
 
-| Variable | Descripción | Ejemplo |
+| Variable | Description | Example |
 |---|---|---|
-| `PORT` | Puerto de la API | `3000` |
-| `DB_HOST` / `DB_PORT` | Host y puerto de PostgreSQL | `localhost` / `5433` |
-| `DB_USERNAME` / `DB_PASSWORD` | Credenciales de PostgreSQL | `postgres` / `postgres` |
-| `DB_NAME` | Nombre de la base de datos | `fleetcore` |
-| `DB_SYNC` | Sincroniza el esquema con las entidades (solo desarrollo) | `true` |
-| `JWT_SECRET` | Secreto para firmar los tokens (mín. 16 caracteres) | `cambia-este-secreto-...` |
-| `JWT_EXPIRES_IN` | Duración del token | `1h` |
-| `API_KEYS` | Llaves válidas para integraciones, separadas por coma | `demo-key-partner-1,demo-key-partner-2` |
+| `PORT` | API port | `3000` |
+| `DB_HOST` / `DB_PORT` | PostgreSQL host and port | `localhost` / `5433` |
+| `DB_USERNAME` / `DB_PASSWORD` | PostgreSQL credentials | `postgres` / `postgres` |
+| `DB_NAME` | Database name | `fleetcore` |
+| `DB_SYNC` | Syncs the schema with the entities (development only) | `true` |
+| `JWT_SECRET` | Secret used to sign tokens (min. 16 characters) | `cambia-este-secreto-...` |
+| `JWT_EXPIRES_IN` | Token lifetime | `1h` |
+| `API_KEYS` | Valid keys for integrations, comma-separated | `demo-key-partner-1,demo-key-partner-2` |
 
-## 📚 Documentación Swagger
+## 📚 Swagger documentation
 
 **`http://localhost:3000/docs`**
 
-1. Ejecuta `POST /api/auth/login` con alguna de las credenciales de prueba.
-2. Copia el `accessToken` y pégalo en el botón **Authorize → bearer**.
-3. Para el endpoint de integraciones, usa **Authorize → api-key** con `demo-key-partner-1`.
+1. Call `POST /api/auth/login` with one of the test credentials.
+2. Copy the `accessToken` and paste it in **Authorize → bearer**.
+3. For the integrations endpoint, use **Authorize → api-key** with `demo-key-partner-1`.
 
-## 🔑 Credenciales de prueba (seed)
+## 🔑 Test credentials (seed)
 
-| Rol | Email | Contraseña | Mecánico vinculado |
+| Role | Email | Password | Linked mechanic |
 |---|---|---|---|
 | ADMIN | `admin@fleetcore.com` | `Admin12345` | — |
 | TECHNICIAN | `carlos.perez@fleetcore.com` | `Tecnico123` | Carlos Pérez |
 | TECHNICIAN | `laura.gomez@fleetcore.com` | `Tecnico123` | Laura Gómez |
 
-API Key de integración: `demo-key-partner-1`
+Integration API Key: `demo-key-partner-1`
 
-### Datos que carga el seed
+### Seeded data
 
-- **Usuarios:** 1 ADMIN y 2 TECHNICIAN.
-- **Mecánicos:** Carlos Pérez y Laura Gómez (activos, vinculados a los técnicos) y Pedro Ruiz (inactivo).
-- **Talleres:** Taller Centro (activo) y Taller Norte (inactivo).
-- **Vehículos:** `ABC123` y `DEF456` (AVAILABLE), `GHI789` (IN_MAINTENANCE) y `JKL012` (INACTIVE).
-- **Mantenimientos:** 2 COMPLETED de `ABC123` (historial), 1 IN_PROGRESS de `GHI789` y 1 SCHEDULED de `DEF456`.
+- **Users:** 1 ADMIN and 2 TECHNICIAN.
+- **Mechanics:** Carlos Pérez and Laura Gómez (active, linked to the technicians) and Pedro Ruiz (inactive).
+- **Workshops:** Taller Centro (active) and Taller Norte (inactive).
+- **Vehicles:** `ABC123` and `DEF456` (AVAILABLE), `GHI789` (IN_MAINTENANCE) and `JKL012` (INACTIVE).
+- **Maintenances:** 2 COMPLETED for `ABC123` (history), 1 IN_PROGRESS for `GHI789` and 1 SCHEDULED for `DEF456`.
 
-## 🧭 Endpoints principales
+## 🧭 Main endpoints
 
-Todas las rutas usan el prefijo `/api`.
+All routes use the `/api` prefix.
 
-| Recurso | Método y ruta | Rol |
+| Resource | Method and route | Role |
 |---|---|---|
-| Auth | `POST /auth/register` (crea TECHNICIAN) · `POST /auth/login` | Público |
-| Usuarios | `POST /users` (cualquier rol) · `GET /users` · `GET /users/:id` | ADMIN |
-| | `GET /users/me` | Autenticado |
-| Vehículos | `POST /vehicles` · `PATCH /vehicles/:id` · `DELETE /vehicles/:id` (inactiva) · `PATCH /vehicles/:id/activate` | ADMIN |
-| | `GET /vehicles` · `GET /vehicles/:id` · `GET /vehicles/plate/:plate` | Autenticado |
-| Mecánicos | `POST /mechanics` · `PATCH /mechanics/:id` · `PATCH /mechanics/:id/activate` · `PATCH /mechanics/:id/deactivate` | ADMIN |
-| | `GET /mechanics?isActive=` · `GET /mechanics/:id` | Autenticado |
-| Talleres | `POST /workshops` · `PATCH /workshops/:id` · `GET /workshops/all` · `PATCH /workshops/:id/activate` · `PATCH /workshops/:id/deactivate` | ADMIN |
-| | `GET /workshops` (activos) · `GET /workshops/:id` | Autenticado |
-| Mantenimientos | `POST /maintenances` · `GET /maintenances` · `GET /maintenances/active` · `GET /maintenances/vehicle/:vehicleId` · `GET /maintenances/vehicle/:vehicleId/history` · `GET /maintenances/mechanic/:mechanicId` | ADMIN |
+| Auth | `POST /auth/register` (creates TECHNICIAN) · `POST /auth/login` | Public |
+| Users | `POST /users` (any role) · `GET /users` · `GET /users/:id` | ADMIN |
+| | `GET /users/me` | Authenticated |
+| Vehicles | `POST /vehicles` · `PATCH /vehicles/:id` · `DELETE /vehicles/:id` (deactivates) · `PATCH /vehicles/:id/activate` | ADMIN |
+| | `GET /vehicles` · `GET /vehicles/:id` · `GET /vehicles/plate/:plate` | Authenticated |
+| Mechanics | `POST /mechanics` · `PATCH /mechanics/:id` · `PATCH /mechanics/:id/activate` · `PATCH /mechanics/:id/deactivate` | ADMIN |
+| | `GET /mechanics?isActive=` · `GET /mechanics/:id` | Authenticated |
+| Workshops | `POST /workshops` · `PATCH /workshops/:id` · `GET /workshops/all` · `PATCH /workshops/:id/activate` · `PATCH /workshops/:id/deactivate` | ADMIN |
+| | `GET /workshops` (active only) · `GET /workshops/:id` | Authenticated |
+| Maintenances | `POST /maintenances` · `GET /maintenances` · `GET /maintenances/active` · `GET /maintenances/vehicle/:vehicleId` · `GET /maintenances/vehicle/:vehicleId/history` · `GET /maintenances/mechanic/:mechanicId` | ADMIN |
 | | `GET /maintenances/my` | TECHNICIAN |
-| | `GET /maintenances/:id` · `PATCH /maintenances/:id/status` | ADMIN o técnico asignado |
-| Integraciones | `GET /integrations/vehicles/:plate/history` | Header `x-api-key` |
+| | `GET /maintenances/:id` · `PATCH /maintenances/:id/status` | ADMIN or assigned technician |
+| Integrations | `GET /integrations/vehicles/:plate/history` | `x-api-key` header |
 
-## 📏 Reglas de negocio implementadas
+## 📏 Business rules
 
-- No se crean mantenimientos para vehículos, mecánicos o talleres inexistentes (404) o inactivos (409).
-- Un vehículo no puede tener más de un mantenimiento activo (`SCHEDULED` o `IN_PROGRESS`).
-- Un mecánico no puede tener mantenimientos activos con horarios cruzados, en ningún taller. Cada mantenimiento tiene `scheduledAt` y `durationMinutes`; los turnos seguidos sí se permiten (7:30–9:00 y 9:00–10:00).
-- Un mecánico solo puede tener un mantenimiento `IN_PROGRESS` a la vez.
-- El kilometraje del mantenimiento no puede ser inferior al del vehículo.
-- Transiciones permitidas: `SCHEDULED → IN_PROGRESS | CANCELLED` e `IN_PROGRESS → COMPLETED | CANCELLED`. `COMPLETED` y `CANCELLED` son estados finales (409).
-- `IN_PROGRESS` pasa el vehículo a `IN_MAINTENANCE`. `COMPLETED` exige `workPerformed`, `finalCost`, `finishedAt` y `finalMileage`, devuelve el vehículo a `AVAILABLE` y actualiza su kilometraje.
-- Creación y cambios de estado se ejecutan en transacciones con bloqueo de filas (`SELECT ... FOR UPDATE`).
-- Respuestas exitosas uniformes (`TransformInterceptor`) y errores uniformes (`AllExceptionsFilter`), incluidos los de base de datos, sin respuestas 500.
+- Maintenances cannot be created for vehicles, mechanics or workshops that don't exist (404) or are inactive (409).
+- A vehicle cannot have more than one active maintenance (`SCHEDULED` or `IN_PROGRESS`).
+- A mechanic cannot have active maintenances with overlapping schedules, in any workshop. Each maintenance has `scheduledAt` and `durationMinutes`; back-to-back slots are allowed (7:30–9:00 and 9:00–10:00).
+- A mechanic can only have one `IN_PROGRESS` maintenance at a time.
+- The maintenance mileage cannot be lower than the vehicle's current mileage.
+- Allowed transitions: `SCHEDULED → IN_PROGRESS | CANCELLED` and `IN_PROGRESS → COMPLETED | CANCELLED`. `COMPLETED` and `CANCELLED` are final states (409).
+- `IN_PROGRESS` sets the vehicle to `IN_MAINTENANCE`. `COMPLETED` requires `workPerformed`, `finalCost`, `finishedAt` and `finalMileage`, sets the vehicle back to `AVAILABLE` and updates its mileage.
+- Creation and status changes run inside transactions with row locking (`SELECT ... FOR UPDATE`).
+- Uniform success responses (`TransformInterceptor`) and uniform errors (`AllExceptionsFilter`), including database errors, with no 500 responses.
 
-## 🧪 Pruebas y evidencias
+## 🧪 Tests and evidence
 
 ```bash
-npm run test          # unitarias (reglas de estado y auth)
-npm run test:cov      # cobertura
-npm run test:e2e      # e2e (requiere: docker compose up -d db_test)
+npm run test          # unit tests (status rules and auth)
+npm run test:cov      # coverage
+npm run test:e2e      # e2e (requires: docker compose up -d db_test)
 ```
 
-- **Colección Postman:** [`postman/FleetCore.postman_collection.json`](postman/FleetCore.postman_collection.json). Impórtala y ejecútala en orden con el *Collection Runner* después de `npm run seed`; incluye los escenarios principales con tests automáticos. También se puede ejecutar en terminal con `npx newman run postman/FleetCore.postman_collection.json`.
-- **Dump de la base de datos:** [`database/fleetcore_dump.sql`](database/fleetcore_dump.sql), con estructura y datos del seed. Para restaurarlo: `psql -U postgres -d fleetcore -f database/fleetcore_dump.sql`.
+- **Postman collection:** [`postman/FleetCore.postman_collection.json`](postman/FleetCore.postman_collection.json). Import it and run it in order with the *Collection Runner* after `npm run seed`; it covers the main scenarios with automated tests. It can also be run from the terminal with `npx newman run postman/FleetCore.postman_collection.json`.
+- **Database dump:** [`database/fleetcore_dump.sql`](database/fleetcore_dump.sql), with the schema and seeded data. To restore it: `psql -U postgres -d fleetcore -f database/fleetcore_dump.sql`.
