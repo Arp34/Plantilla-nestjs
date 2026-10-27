@@ -6,8 +6,8 @@ REST API to manage the lifecycle of preventive and corrective maintenance for th
 
 ## 👤 Coder
 
-- **Name:** _[your name]_
-- **Clan:** _[your clan]_
+- **Name:** Axel Ruiz Polo
+- **Clan:** Centurion
 
 ## 🚀 Requirements
 
